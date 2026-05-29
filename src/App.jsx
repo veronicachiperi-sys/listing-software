@@ -67,9 +67,7 @@ export default function App() {
   const handleUploadReviews = (text, filename) => {
     const parsed = parseReviewCSV(text);
     if (parsed.length === 0) {
-      const firstLine = text.split("\n")[0] || "";
-      const detected = firstLine ? `\n\nDetected columns: ${firstLine}` : "";
-      alert(`No reviews found in "${filename}". The CSV needs a column with review text (e.g. "text", "review", "comment", "public_review") and will be more useful with "property", "rating", and "date" columns.${detected}`);
+      alert(`No review text found in "${filename}". Make sure your CSV has a column containing the actual review content.`);
       return;
     }
     setReviews((prev) => [...prev, ...parsed]);
@@ -95,7 +93,7 @@ export default function App() {
   const handleUploadProperties = (text, filename) => {
     const parsed = parsePropertyCSV(text);
     if (parsed.length === 0) {
-      alert("No properties found in the CSV. Check the column names.");
+      alert(`No properties found in "${filename}". Make sure your CSV has a column with property or listing names.`);
       return;
     }
     setProperties((prev) => [...prev, ...parsed]);

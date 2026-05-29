@@ -33,12 +33,6 @@ export default function UploadView({
     setPasteText("");
   };
 
-  const columnHints = {
-    reviews: "property, ota, date, rating, text, guest (also accepts: review, comment, review_text, property_name, platform, score, stars)",
-    properties: "name, market, otas (comma-separated), guesty_id, airbnb_url, booking_url, vrbo_url",
-    audit: "property, ota, date, [any additional columns become audit fields and are scored automatically]",
-  };
-
   return (
     <div>
       <div style={{ fontSize: 15, fontWeight: 500, marginBottom: 16 }}>Upload data</div>
@@ -108,20 +102,6 @@ export default function UploadView({
           Click to browse or drag and drop a CSV file
         </div>
       </div>
-
-      {/* Column hints */}
-      <Card style={{ padding: "14px 20px", marginBottom: 20 }}>
-        <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 6, display: "flex", alignItems: "center", gap: 6 }}>
-          <Icon name="info-circle" size={14} />
-          Expected columns for {uploadTab}
-        </div>
-        <div style={{
-          fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.6,
-          fontFamily: "var(--font-mono)",
-        }}>
-          {columnHints[uploadTab]}
-        </div>
-      </Card>
 
       {/* Paste reviews */}
       {uploadTab === "reviews" && (
