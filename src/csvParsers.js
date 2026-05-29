@@ -18,26 +18,45 @@ export function parseReviewCSV(text) {
     console.warn("CSV parse warnings:", errors);
   }
 
+  const pick = (r, keys) => keys.reduce((v, k) => v || r[k] || "", "");
+
   const mapped = data
     .filter((r) => {
-      const txt = r.text || r.review || r.comment || r.review_text || r.comments || r.review_body || "";
+      const txt = pick(r, [
+        "text", "review", "comment", "review_text", "comments", "review_body",
+        "public_review", "guest_review", "guest_comment", "private_feedback",
+        "description", "feedback", "notes",
+      ]);
       return txt.trim().length > 0;
     })
     .map((r) => ({
       id: genId(),
-      property:
-        r.property || r.property_name || r.listing || r.listing_name || r.unit || r.unit_name || "Unknown",
-      ota:
-        r.ota || r.platform || r.channel || r.source || r.booking_channel || "Unknown",
-      date:
-        r.date || r.review_date || r.created_at || r.created || r.submitted || r.check_out || "",
-      rating: parseFloat(
-        r.rating || r.score || r.overall_rating || r.stars || r.overall || 0
-      ),
-      text:
-        r.text || r.review || r.comment || r.review_text || r.comments || r.review_body || "",
-      guest:
-        r.guest || r.guest_name || r.reviewer || r.reviewer_name || r.name || "",
+      property: pick(r, [
+        "property", "property_name", "listing", "listing_name", "listing_title",
+        "unit", "unit_name", "accommodation", "rental",
+      ]) || "Unknown",
+      ota: pick(r, [
+        "ota", "platform", "channel", "source", "booking_channel",
+        "booking_platform", "site",
+      ]) || "Unknown",
+      date: pick(r, [
+        "date", "review_date", "created_at", "created", "submitted",
+        "check_out", "check_out_date", "checkout_date", "check-out_date",
+        "departure_date", "stay_date",
+      ]),
+      rating: parseFloat(pick(r, [
+        "rating", "score", "overall_rating", "stars", "overall",
+        "overall_score", "review_rating", "total_rating",
+      ]) || 0),
+      text: pick(r, [
+        "text", "review", "comment", "review_text", "comments", "review_body",
+        "public_review", "guest_review", "guest_comment", "private_feedback",
+        "description", "feedback", "notes",
+      ]),
+      guest: pick(r, [
+        "guest", "guest_name", "reviewer", "reviewer_name", "name",
+        "traveler", "traveller", "author",
+      ]),
       category_ratings: extractCategoryRatings(r),
       analyzed: false,
     }));

@@ -67,7 +67,9 @@ export default function App() {
   const handleUploadReviews = (text, filename) => {
     const parsed = parseReviewCSV(text);
     if (parsed.length === 0) {
-      alert("No reviews found in the CSV. Check the column names match the expected format.");
+      const firstLine = text.split("\n")[0] || "";
+      const detected = firstLine ? `\n\nDetected columns: ${firstLine}` : "";
+      alert(`No reviews found in "${filename}". The CSV needs a column with review text (e.g. "text", "review", "comment", "public_review") and will be more useful with "property", "rating", and "date" columns.${detected}`);
       return;
     }
     setReviews((prev) => [...prev, ...parsed]);
